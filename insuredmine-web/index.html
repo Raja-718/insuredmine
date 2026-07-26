@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InsuredMine — AI Intelligence Platform</title>
+  <meta name="description" content="AI-powered insurance intelligence: premium prediction and document entity extraction. A machine-learning demo by an ML Engineer candidate." />
+  <meta name="theme-color" content="#0b1533" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="InsuredMine — AI Intelligence Platform" />
+  <meta property="og:description" content="Premium prediction & document AI, running entirely in your browser." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+  <!-- ===== Nav ===== -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="#top" aria-label="InsuredMine home">
+        <img class="brand__logo-img" src="assets/logo.png" alt="InsuredMine logo"
+             onerror="this.style.display='none'" />
+        <span class="brand__name">Insured<strong>Mine</strong></span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#predict">Premium Prediction</a>
+        <a href="#extract">Document AI</a>
+        <a href="#insights">Insights</a>
+        <span class="nav__badge" title="Runs entirely in your browser">● live demo</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="top">
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <span class="pill">ML Engineer Assessment · Live in-browser demo</span>
+        <h1>AI-powered intelligence for the<br><span class="grad">modern insurance CRM</span></h1>
+        <p>Forecast premiums and extract customer data from documents — powered by
+           machine-learning models (RandomForest · XGBoost · SVR) and an NLP
+           extraction pipeline, running fully client-side.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#predict">Try Premium Prediction</a>
+          <a class="btn btn--ghost" href="#extract">Extract a Document</a>
+        </div>
+      </div>
+      <div class="hero__stats" id="heroStats" aria-live="polite">
+        <div class="stat"><div class="stat__val" id="statModel">—</div><div class="stat__label">Selected model</div></div>
+        <div class="stat"><div class="stat__val" id="statR2">—</div><div class="stat__label">Model fit R²</div></div>
+        <div class="stat"><div class="stat__val" id="statSamples">—</div><div class="stat__label">Months trained</div></div>
+        <div class="stat"><div class="stat__val" id="statFixed">—</div><div class="stat__label">Anomalies repaired</div></div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+
+    <!-- ===== Premium Prediction ===== -->
+    <section class="panel" id="predict">
+      <div class="panel__head">
+        <h2><span class="ico">📈</span> Premium Prediction</h2>
+        <p>Forecast a month's premium share using the trained regression model.</p>
+      </div>
+      <div class="grid grid--2">
+        <div class="card">
+          <h3>Predict a month</h3>
+          <div class="form-row">
+            <label for="inYear">Year
+              <select id="inYear"><option>2024</option><option>2025</option><option>2026</option></select>
+            </label>
+            <label for="inMonth">Month
+              <select id="inMonth" aria-label="Month"></select>
+            </label>
+          </div>
+          <button class="btn btn--primary btn--block" id="btnPredict">Predict premium</button>
+          <div class="result" id="predResult" hidden aria-live="polite">
+            <div class="result__pct"><span id="predPct">—</span><small>% of total</small></div>
+            <div class="result__abs">≈ <strong id="predAbs">—</strong> estimated premium</div>
+            <div class="result__meta" id="predMeta"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Premium share over time</h3>
+          <div id="chart" class="chart" role="img" aria-label="Line chart of monthly premium share"></div>
+          <p class="muted small">Blue line = actual monthly premium share. The teal
+             marker shows your predicted month.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Model comparison — R² &amp; MAE</h3>
+          <div class="tbl-wrap">
+            <table class="tbl" id="metricsTbl">
+              <thead><tr><th>Model</th><th>R² (fit)</th><th>MAE % (fit)</th><th>R² (CV check)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="muted small">Headline R²/MAE are model-fit metrics. RandomForest is
+             selected for best generalisation — not XGBoost, whose ~0.99 training R² is
+             over-fitting on only 13 data points.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card card--plot">
+          <h3>Diagnostics — actual vs. predicted</h3>
+          <img class="plot" src="assets/actual_vs_predicted.png" loading="lazy"
+               alt="Actual versus predicted premium share chart" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Document AI ===== -->
+    <section class="panel" id="extract">
+      <div class="panel__head">
+        <h2><span class="ico">🧾</span> Document AI — Entity Extraction</h2>
+        <p>Turn semi-structured OCR text into clean, structured customer records.</p>
+      </div>
+      <div class="grid grid--2">
+        <div class="card">
+          <h3>OCR input</h3>
+          <textarea id="ocrText" rows="14" spellcheck="false"
+                    aria-label="OCR text input"></textarea>
+          <div class="btn-row">
+            <button class="btn btn--primary" id="btnExtract">Extract entities</button>
+            <button class="btn btn--ghost" id="btnSample">Load sample</button>
+            <button class="btn btn--ghost" id="btnClear">Clear</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Extracted records <span class="chip" id="extractCount" hidden></span></h3>
+          <div id="extractOut" class="extract-out">
+            <p class="muted">Click <b>Extract entities</b> to see structured output.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Insights ===== -->
+    <section class="panel" id="insights">
+      <div class="panel__head">
+        <h2><span class="ico">💡</span> How it's built</h2>
+        <p>Machine-learning engineering behind the platform.</p>
+      </div>
+      <div class="grid grid--3">
+        <div class="card feature"><div class="feature__ico">🎯</div><h4>Premium Prediction</h4>
+          <p>Regression (SVR / RandomForest / XGBoost) with robust outlier repair and
+             cyclical feature engineering; evaluated with R² &amp; MAE.</p></div>
+        <div class="card feature"><div class="feature__ico">🔍</div><h4>Document AI</h4>
+          <p>Regex + NLP extraction with de-duplication and schema validation, output
+             as clean JSON — ported to run in-browser.</p></div>
+        <div class="card feature"><div class="feature__ico">⚙️</div><h4>Engineering</h4>
+          <p>Reproducible Python pipeline, unit tests, and a FastAPI service — this page
+             is the static, deployable front of it.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__inner">
+      <span class="brand__name">Insured<strong>Mine</strong></span>
+      <span class="muted small">ML Intelligence Platform · scikit-learn · XGBoost · runs 100% in-browser</span>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/ocr.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

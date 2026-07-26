@@ -1,0 +1,14 @@
+# Core (Sections A & B)
+numpy
+pandas
+scikit-learn
+xgboost
+matplotlib
+
+# Optional: enables the spaCy NER name-fallback in Section B.
+# The code runs fine without it (regex handles the provided data).
+# spacy
+#   after install:  python -m spacy download en_core_web_sm
+
+# Optional: run the test suite
+# pytest

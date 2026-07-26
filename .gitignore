@@ -1,0 +1,27 @@
+# ===== Environments (large / machine-specific) =====
+.venv/
+venv/
+env/
+node_modules/
+
+# ===== Python caches =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ===== Claude / tooling / IDE =====
+.claude/
+.vscode/
+.idea/
+
+# ===== Build / submission artifacts =====
+*.zip
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs / temp =====
+*.log

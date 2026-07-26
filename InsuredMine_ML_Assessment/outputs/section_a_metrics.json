@@ -1,0 +1,38 @@
+{
+  "selected_model": "RandomForest",
+  "target": "premium as a percentage of total premium",
+  "n_samples": 13,
+  "outliers_repaired": 1,
+  "primary_metric": "model fit R2 and MAE on the percentage target",
+  "selection_criterion": "best generalisation (lowest Leave-One-Out CV error), which avoids over-fitting despite XGBoost's higher training R2",
+  "metrics": {
+    "SVR": {
+      "R2": 0.561,
+      "MAE_percentage_points": 0.4264,
+      "generalization_check_LOO_cv": {
+        "R2": -2.4839,
+        "MAE_percentage_points": 2.6846,
+        "MAE_absolute_currency": 823937.27
+      }
+    },
+    "RandomForest": {
+      "R2": 0.7325,
+      "MAE_percentage_points": 0.721,
+      "generalization_check_LOO_cv": {
+        "R2": -0.8132,
+        "MAE_percentage_points": 1.8534,
+        "MAE_absolute_currency": 568832.66
+      }
+    },
+    "XGBoost": {
+      "R2": 0.9945,
+      "MAE_percentage_points": 0.0958,
+      "generalization_check_LOO_cv": {
+        "R2": -1.335,
+        "MAE_percentage_points": 2.0227,
+        "MAE_absolute_currency": 620804.47
+      }
+    }
+  },
+  "note": "R2/MAE above are the model-fit metrics on the percentage target. RandomForest is selected because it generalises best under Leave-One-Out cross-validation, rather than the model with the highest training R2 (XGBoost ~0.99 is over-fitting on only 13 points). The CV figures are reported for transparency: with such a small sample, out-of-fold accuracy is inherently limited."
+}
